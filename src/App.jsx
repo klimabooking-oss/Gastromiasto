@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import B2CLayout from './layouts/B2CLayout';
 import B2BLayout from './layouts/B2BLayout';
 
+import Splash from './pages/Splash';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Home from './pages/b2c/Home';
@@ -19,8 +20,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Landing />} />
+        {/* Splash Screen — startup, role selection + slideshow */}
+        <Route path="/" element={<Splash />} />
+        <Route path="/landing" element={<Landing />} />
         <Route path="/login" element={<Login />} />
 
         {/* B2C Routes */}
