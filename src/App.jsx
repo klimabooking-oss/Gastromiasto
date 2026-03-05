@@ -5,6 +5,7 @@ import B2BLayout from './layouts/B2BLayout';
 
 import Splash from './pages/Splash';
 import Landing from './pages/Landing';
+import Presentation from './pages/Presentation';
 import Login from './pages/Login';
 import Home from './pages/b2c/Home';
 import Menu from './pages/b2c/Menu';
@@ -23,6 +24,7 @@ function App() {
         {/* Splash Screen — startup, role selection + slideshow */}
         <Route path="/" element={<Splash />} />
         <Route path="/landing" element={<Landing />} />
+        <Route path="/presentation" element={<Presentation />} />
         <Route path="/login" element={<Login />} />
 
         {/* B2C Routes */}
