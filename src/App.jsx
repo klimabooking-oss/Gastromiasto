@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import B2CLayout from './layouts/B2CLayout';
 import B2BLayout from './layouts/B2BLayout';
 
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Home from './pages/b2c/Home';
 import Menu from './pages/b2c/Menu';
@@ -18,11 +19,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Login Route */}
+        {/* Public Routes */}
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
 
         {/* B2C Routes */}
-        <Route path="/" element={<B2CLayout />}>
+        <Route path="/home" element={<B2CLayout />}>
           <Route index element={<Home />} />
           <Route path="menu" element={<Menu />} />
           <Route path="checkout" element={<Checkout />} />
@@ -38,7 +40,7 @@ function App() {
         </Route>
 
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

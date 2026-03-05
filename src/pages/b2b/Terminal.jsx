@@ -1,145 +1,139 @@
 import React, { useState } from 'react';
-import { Clock, AlertTriangle, CheckCircle, ChefHat, PhoneCall } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { Bell, Printer, Phone, AlertTriangle } from 'lucide-react';
+
+const TABS = ['Nowe (5)', 'W przygotowaniu (12)', 'Gotowe (3)', 'Odebrane'];
+
+const ORDERS = [
+    {
+        id: '#1042',
+        urgent: true,
+        time: '02:45 min temu',
+        type: 'Dostawa',
+        items: [
+            { qty: '2x', name: 'Gastro Burger Combo', note: 'Medium rare, Extra cheese' },
+            { qty: '1x', name: 'Słodkie Frytki z Batata', note: 'Majonez czosnkowy osobno' },
+        ],
+        warning: '🚨 BEZ CEBULI – CIĘŻKA ALERGIA',
+    },
+    {
+        id: '#1043',
+        urgent: false,
+        time: '00:15 min temu',
+        type: 'Odbiór',
+        items: [
+            { qty: '1x', name: 'Wrap Vege', note: 'Tortilla bezglutenowa' },
+            { qty: '2x', name: 'Lemoniada Rzemieślnicza', note: null },
+        ],
+        warning: null,
+    },
+];
 
 export default function Terminal() {
-    const [activeTab, setActiveTab] = useState('nowe');
-
-    const tabs = [
-        { id: 'nowe', label: 'NOWE', count: 3 },
-        { id: 'przygotowanie', label: 'W przygotowaniu', count: 5 },
-        { id: 'gotowe', label: 'Gotowe', count: 2 },
-    ];
+    const [activeTab, setActiveTab] = useState(0);
 
     return (
-        <div className="flex flex-col h-full fade-in">
+        <div className="min-h-full bg-gray-50">
             {/* Header */}
-            <div className="mb-6">
-                <h1 className="text-2xl md:text-3xl font-bold text-primary tracking-tight mb-4">Terminal Zamówień</h1>
-
-                {/* Status Tabs */}
-                <div className="flex gap-2 border-b border-gray-200 pb-px">
-                    {tabs.map(tab => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={cn(
-                                "px-5 py-3 text-sm font-bold rounded-t-lg transition-colors relative flex items-center gap-2",
-                                activeTab === tab.id
-                                    ? "bg-white text-primary rounded-t-xl border-t border-l border-r border-gray-200 -mb-px z-10 shadow-sm"
-                                    : "bg-gray-100 text-gray-500 hover:bg-gray-200 border border-transparent"
-                            )}
-                        >
-                            {tab.label}
-                            {tab.count > 0 && (
-                                <span className={cn(
-                                    "w-5 h-5 rounded-full flex items-center justify-center text-[10px]",
-                                    activeTab === tab.id ? "bg-orange-500 text-white" : "bg-gray-300 text-gray-700"
-                                )}>
-                                    {tab.count}
-                                </span>
-                            )}
-                        </button>
-                    ))}
+            <header className="bg-[#1a202c] px-5 pt-12 pb-5">
+                <div className="flex justify-between items-center">
+                    <button className="text-gray-400">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+                        </svg>
+                    </button>
+                    <div className="text-center">
+                        <div className="text-xs text-gray-500 font-semibold uppercase tracking-widest">LIVE TERMINAL</div>
+                        <div className="text-base font-black text-white">GastroMiasto Fest</div>
+                    </div>
+                    <div className="relative">
+                        <Bell size={22} className="text-white" />
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-[9px] font-bold">5</span>
+                        </div>
+                    </div>
                 </div>
+            </header>
+
+            {/* Tabs */}
+            <div className="px-4 py-3 flex gap-2 overflow-x-auto no-scrollbar bg-white border-b border-gray-100">
+                {TABS.map((tab, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setActiveTab(i)}
+                        className={`flex-shrink-0 py-2 px-4 rounded-full font-bold text-sm transition-all ${activeTab === i
+                                ? 'bg-orange-500 text-white shadow-md'
+                                : 'bg-gray-100 text-gray-500'
+                            }`}
+                    >
+                        {tab}
+                    </button>
+                ))}
             </div>
 
-            {/* Orders Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {/* Order Card 1 */}
-                <OrderCard
-                    id="#1042"
-                    time="1 min temu"
-                    items={["2x Burger Klasyk", "1x Frytki Duże"]}
-                    total="86,00 zł"
-                    warning="⚠️ BEZ CEBULI!"
-                    customer="Kasia, 789 123 456"
-                />
+            {/* Order Cards */}
+            <div className="px-4 pt-4 flex flex-col gap-4 pb-6">
+                {/* Section Title */}
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <span className="text-orange-500">🔥</span>
+                        <h2 className="text-base font-black text-red-600 uppercase tracking-wider">NOWE ZAMÓWIENIA</h2>
+                    </div>
+                    <span className="bg-red-100 text-red-600 font-bold text-xs px-3 py-1.5 rounded-full">5 OCZEKUJE</span>
+                </div>
 
-                {/* Order Card 2 */}
-                <OrderCard
-                    id="#1043"
-                    time="4 min temu"
-                    items={["1x Vege Szaleństwo", "1x Lemoniada"]}
-                    total="47,00 zł"
-                    customer="Piotr, 555 444 333"
-                />
-
-                {/* Order Card 3 */}
-                <OrderCard
-                    id="#1044"
-                    time="6 min temu"
-                    items={["3x Burger Drwala", "2x Krążki Cebulowe"]}
-                    total="145,00 zł"
-                    warning="⚠️ DODATKOWY SOS DO FRYTEK"
-                    customer="Adam, 111 222 333"
-                />
+                {ORDERS.map((order) => (
+                    <OrderCard key={order.id} order={order} />
+                ))}
             </div>
         </div>
     );
 }
 
-function OrderCard({ id, time, items, warning, customer, total }) {
-    const [prepTime, setPrepTime] = useState(15);
+function OrderCard({ order }) {
+    const [time, setTime] = useState(20);
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 flex flex-col overflow-hidden transition-all hover:shadow-md">
-            {/* Card Header */}
-            <div className="bg-gray-50 px-5 py-3 border-b border-gray-100 flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                    <span className="font-black text-lg text-primary">{id}</span>
-                    <span className="flex items-center gap-1 bg-white border border-gray-200 px-2 py-0.5 rounded text-xs font-bold text-gray-600">
-                        <Clock size={12} /> {time}
-                    </span>
-                </div>
-                <span className="font-bold text-primary">{total}</span>
-            </div>
-
-            {/* Warning Box */}
-            {warning && (
-                <div className="bg-red-50 border-y border-red-100 px-5 py-2 flex items-center gap-2">
-                    <AlertTriangle size={16} className="text-red-600" />
-                    <span className="text-red-700 font-bold text-sm tracking-wide">{warning}</span>
-                </div>
-            )}
-
-            {/* Card Body (Items) */}
-            <div className="p-5 flex-1 flex flex-col gap-2">
-                {items.map((item, idx) => (
-                    <div key={idx} className="flex gap-2 items-start text-primary font-medium text-sm">
-                        <div className="w-1.5 h-1.5 rounded-full bg-gray-300 mt-2 flex-shrink-0"></div>
-                        <span>{item}</span>
+        <div className={`bg-white rounded-2xl overflow-hidden shadow-sm ${order.urgent ? 'border-2 border-orange-500' : 'border border-gray-100'}`}>
+            <div className="px-4 pt-4 pb-3">
+                <div className="flex justify-between items-start mb-2">
+                    <div className="flex items-center gap-2">
+                        <span className="text-xl font-black text-gray-900">{order.id}</span>
+                        {order.urgent && (
+                            <span className="bg-orange-100 text-orange-600 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Pilne</span>
+                        )}
                     </div>
-                ))}
-
-                <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-2 text-xs font-medium text-gray-500">
-                    <PhoneCall size={14} /> {customer}
+                    <button className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center">
+                        <Printer size={16} className="text-gray-500" />
+                    </button>
                 </div>
-            </div>
+                <p className="text-xs text-gray-400 mb-3">{order.time} • {order.type}</p>
 
-            {/* Actions */}
-            <div className="p-5 bg-gray-50 border-t border-gray-100">
-                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wide">Czas przyg. (min)</label>
-                <div className="flex gap-2 mb-4">
-                    {[15, 20, 30].map(t => (
-                        <button
-                            key={t}
-                            onClick={() => setPrepTime(t)}
-                            className={cn(
-                                "flex-1 py-1.5 rounded-lg text-sm font-bold border transition-colors",
-                                prepTime === t
-                                    ? "bg-primary text-white border-primary"
-                                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                            )}
-                        >
-                            {t}
-                        </button>
+                <div className="space-y-2 mb-3">
+                    {order.items.map((item, i) => (
+                        <div key={i}>
+                            <div className="flex gap-2 items-baseline">
+                                <span className="text-gray-400 font-bold text-sm w-7 flex-shrink-0">{item.qty}</span>
+                                <span className="font-bold text-gray-900 text-base">{item.name}</span>
+                            </div>
+                            {item.note && <p className="text-xs text-gray-400 ml-9">{item.note}</p>}
+                        </div>
                     ))}
                 </div>
 
-                <button className="w-full bg-success hover:bg-green-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-green-500/20 transition-all flex justify-center items-center gap-2">
-                    <ChefHat size={20} />
-                    AKCEPTUJ
+                {order.warning && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl px-3 py-2.5 flex items-center gap-2 mb-3">
+                        <AlertTriangle size={16} className="text-yellow-600 flex-shrink-0" />
+                        <span className="text-yellow-700 font-black text-sm uppercase">{order.warning}</span>
+                    </div>
+                )}
+            </div>
+
+            <div className="px-4 pb-4 flex gap-2">
+                <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-black py-3.5 rounded-xl flex items-center justify-center gap-2 transition-colors active:scale-95">
+                    ▶ START
+                </button>
+                <button className="w-12 h-12 border border-gray-200 rounded-xl flex items-center justify-center text-gray-500 flex-shrink-0">
+                    <Phone size={18} />
                 </button>
             </div>
         </div>

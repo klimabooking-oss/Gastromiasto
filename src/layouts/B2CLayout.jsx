@@ -14,9 +14,9 @@ export default function B2CLayout() {
 
                 {/* Bottom Navigation */}
                 <nav className="absolute bottom-0 w-full bg-white border-t border-gray-100 flex justify-around items-center py-3 pb-safe z-50">
-                    <NavItem to="/" icon={<Home size={24} />} label="Główna" />
-                    <NavItem to="/orders" icon={<ClipboardList size={24} />} label="Zamówienia" />
-                    <NavItem to="/checkout" icon={<ShoppingCart size={24} />} label="Koszyk" />
+                    <NavItem to="/home" icon={<Home size={24} />} label="Główna" exact />
+                    <NavItem to="/home/menu" icon={<ClipboardList size={24} />} label="Zamówienia" />
+                    <NavItem to="/home/checkout" icon={<ShoppingCart size={24} />} label="Koszyk" />
                     <NavItem to="/login" icon={<User size={24} />} label="Wyloguj" />
                 </nav>
             </div>
