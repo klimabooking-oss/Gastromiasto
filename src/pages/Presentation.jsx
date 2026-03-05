@@ -68,7 +68,7 @@ export default function Presentation() {
 
                 {/* Slide area — full height minus bottom bar */}
                 <div
-                    className="flex-1 overflow-hidden cursor-grab active:cursor-grabbing select-none"
+                    className="flex-1 overflow-hidden cursor-grab active:cursor-grabbing select-none relative"
                     onMouseDown={onPointerDown}
                     onMouseMove={onPointerMove}
                     onMouseUp={onPointerUp}
@@ -86,16 +86,33 @@ export default function Presentation() {
                             className="w-full h-full"
                             style={{
                                 objectFit: 'contain',
-                                transform: `scale(0.9) translateX(${dragging ? dragOffset * 0.08 : 0}px)`,
+                                transform: `translateX(${dragging ? dragOffset * 0.08 : 0}px)`,
                                 transition: dragging ? 'none' : 'transform 0.3s ease',
                                 animation: animDir
-                                    ? animDir === 'left'
-                                        ? 'slideEnterLeft 0.35s cubic-bezier(0.22,1,0.36,1)'
-                                        : 'slideEnterRight 0.35s cubic-bezier(0.22,1,0.36,1)'
-                                    : 'none',
+                                    ? `${animDir === 'left' ? 'slideEnterLeft' : 'slideEnterRight'} 0.4s cubic-bezier(0.22,1,0.36,1) forwards`
+                                    : 'slideFloat 6s ease-in-out infinite',
                             }}
                         />
                     </div>
+
+                    {/* Animated orange accent bar — top */}
+                    <div
+                        key={`bar-${current}`}
+                        className="absolute top-0 left-0 h-[3px] pointer-events-none"
+                        style={{ animation: 'accentExpand 0.6s cubic-bezier(0.22,1,0.36,1) forwards', right: 0 }}
+                    >
+                        <div className="h-full w-full bg-gradient-to-r from-orange-500 via-orange-400 to-transparent" />
+                    </div>
+
+                    {/* Pulsing corner glow */}
+                    <div
+                        key={`glow-${current}`}
+                        className="absolute bottom-0 right-0 w-48 h-48 pointer-events-none"
+                        style={{
+                            background: 'radial-gradient(circle at bottom right, rgba(249,115,22,0.15) 0%, transparent 70%)',
+                            animation: 'glowPulse 3s ease-in-out infinite',
+                        }}
+                    />
                 </div>
 
                 {/* Bottom bar — arrows + counter only, no dots */}
@@ -129,12 +146,24 @@ export default function Presentation() {
 
             <style>{`
         @keyframes slideEnterLeft {
-          from { opacity: 0.4; transform: scale(0.9) translateX(6%); }
+          from { opacity: 0.3; transform: scale(0.88) translateX(8%); }
           to   { opacity: 1;   transform: scale(0.9) translateX(0); }
         }
         @keyframes slideEnterRight {
-          from { opacity: 0.4; transform: scale(0.9) translateX(-6%); }
+          from { opacity: 0.3; transform: scale(0.88) translateX(-8%); }
           to   { opacity: 1;   transform: scale(0.9) translateX(0); }
+        }
+        @keyframes slideFloat {
+          0%, 100% { transform: scale(0.9) translateY(0px); }
+          50%       { transform: scale(0.9) translateY(-6px); }
+        }
+        @keyframes accentExpand {
+          from { opacity: 0; transform: scaleX(0); transform-origin: left; }
+          to   { opacity: 1; transform: scaleX(1); transform-origin: left; }
+        }
+        @keyframes glowPulse {
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50%       { opacity: 1;   transform: scale(1.15); }
         }
       `}</style>
         </div>
